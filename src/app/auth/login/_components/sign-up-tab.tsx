@@ -46,7 +46,7 @@ export function SignUpTab() {
             { ...data, callbackURL: "/" },
             {
                 onError: (error) => {
-                    toast.error(error.error.message || "Something went wrong with Sign-up handler");
+                    toast.error(error.error.message || "Too many requests");
                 },
                 onSuccess: () => {
                     toast.success("Sign up successful!");

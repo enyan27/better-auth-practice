@@ -1,18 +1,37 @@
-import { Button } from "@/components/ui/button";
-import Image from "next/image";
-import Link from "next/link";
+"use client"
+
+import { Button } from "@/components/ui/button"
+import { authClient } from "@/lib/auth/auth-client"
+import Link from "next/link"
 
 export default function Home() {
+  const { data: session, isPending: loading } = authClient.useSession();
+
+  if (loading) {
+    return <div>Loading...</div>
+  }
+
   return (
     <div className="my-6 px-4 max-w-md mx-auto">
       <div className="text-center space-y-6">
-        <Image src="/ena.jpg" alt="ena" width={64} height={64} className="mx-auto rounded-full" />
-        <h1 className="text-3xl font-bold">こんにちは</h1>
-
-        <Button asChild size="lg">
-          <Link href="/auth/login">Sign In / Sign Up</Link>
-        </Button>
+        {session == null ? (
+          <>
+            <h1 className="text-3xl font-bold">Welcome to Our App</h1>
+            <Button asChild size="lg">
+              <Link href="/auth/login">Sign In / Sign Up</Link>
+            </Button>
+          </>
+        ) : (
+          <>
+            <h1 className="text-3xl font-bold">Welcome {session.user.name}!</h1>
+            <div className="flex gap-4 justify-center">
+              <Button asChild size="lg" variant="destructive">
+                <Link href="/auth/login">Logout</Link>
+              </Button>
+            </div>
+          </>
+        )}
       </div>
     </div>
-  );
+  )
 }
