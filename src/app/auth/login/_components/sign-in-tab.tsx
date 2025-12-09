@@ -21,7 +21,7 @@ import { useRouter } from "next/navigation";
 
 const signInSchema = z.object({
   email: z.email().min(1),
-  password: z.string().min(6),
+  password: z.string().min(8),
 });
 
 type SignInForm = z.infer<typeof signInSchema>;
