@@ -3,6 +3,7 @@
 import { BetterAuthActionButton } from "@/components/auth/better-auth-action-button";
 import { Button } from "@/components/ui/button";
 import { authClient } from "@/lib/auth/auth-client";
+import Image from "next/image";
 import Link from "next/link";
 
 export default function Home() {
@@ -25,6 +26,15 @@ export default function Home() {
         ) : (
           <>
             <h1 className="text-3xl font-bold">Welcome {session.user.name}!</h1>
+
+            <Image
+              width={100}
+              height={100}
+              src={session.user.image || "/ena.png"}
+              alt="user-avatar"
+              className="mx-auto rounded-full"
+            />
+
             <div className="flex gap-4 justify-center">
               <Button asChild size="lg">
                 <Link href="/profile">Profile</Link>

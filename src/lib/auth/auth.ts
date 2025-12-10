@@ -2,20 +2,22 @@ import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { db } from "@/drizzle/db";
 import { nextCookies } from "better-auth/next-js";
+import { sendPasswordResetEmail } from "../email/password-reset-email";
+import { sendEmailVerificationEmail } from "../email/email-verification";
 
 export const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
     requireEmailVerification: true,
     sendResetPassword: async ({ user, url }) => {
-      // await sendPasswordResetEmail({ user, url })
+      await sendPasswordResetEmail({ user, url });
     },
   },
   emailVerification: {
     autoSignInAfterVerification: true,
     sendOnSignUp: true,
     sendVerificationEmail: async ({ user, url }) => {
-      // await sendEmailVerificationEmail({ user, url })
+      await sendEmailVerificationEmail({ user, url });
     },
   },
   socialProviders: {
