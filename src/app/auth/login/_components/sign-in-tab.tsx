@@ -1,8 +1,8 @@
-"use client";
+"use client"
 
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import z from "zod";
+import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import z from "zod"
 import {
   Form,
   FormControl,
@@ -10,55 +10,56 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { PasswordInput } from "@/components/ui/password-input";
-import { Button } from "@/components/ui/button";
-import { LoadingSwap } from "@/components/ui/loading-swap";
-import { authClient } from "@/lib/auth/auth-client";
-import { toast } from "sonner";
-import { useRouter } from "next/navigation";
+} from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
+import { PasswordInput } from "@/components/ui/password-input"
+import { Button } from "@/components/ui/button"
+import { LoadingSwap } from "@/components/ui/loading-swap"
+import { authClient } from "@/lib/auth/auth-client"
+import { toast } from "sonner"
+import { useRouter } from "next/navigation"
+import { PasskeyButton } from "./passkey-button"
 
 const signInSchema = z.object({
   email: z.email().min(1),
-  password: z.string().min(8),
-});
+  password: z.string().min(6),
+})
 
-type SignInForm = z.infer<typeof signInSchema>;
+type SignInForm = z.infer<typeof signInSchema>
 
 export function SignInTab({
   openEmailVerificationTab,
   openForgotPassword,
 }: {
-  openEmailVerificationTab: (email: string) => void;
-  openForgotPassword: () => void;
+  openEmailVerificationTab: (email: string) => void
+  openForgotPassword: () => void
 }) {
-  const router = useRouter();
+  const router = useRouter()
   const form = useForm<SignInForm>({
     resolver: zodResolver(signInSchema),
     defaultValues: {
       email: "",
       password: "",
     },
-  });
+  })
 
-  const { isSubmitting } = form.formState;
+  const { isSubmitting } = form.formState
 
   async function handleSignIn(data: SignInForm) {
     await authClient.signIn.email(
       { ...data, callbackURL: "/" },
       {
-        onError: (error) => {
+        onError: error => {
           if (error.error.code === "EMAIL_NOT_VERIFIED") {
-            openEmailVerificationTab(data.email);
+            openEmailVerificationTab(data.email)
           }
-          toast.error(error.error.message || "Failed to sign in");
+          toast.error(error.error.message || "Failed to sign in")
         },
         onSuccess: () => {
-          router.push("/");
+          router.push("/")
         },
       }
-    );
+    )
   }
 
   return (
@@ -72,7 +73,11 @@ export function SignInTab({
               <FormItem>
                 <FormLabel>Email</FormLabel>
                 <FormControl>
-                  <Input type="email" autoComplete="email webauthn" {...field} />
+                  <Input
+                    type="email"
+                    autoComplete="email webauthn"
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -97,7 +102,10 @@ export function SignInTab({
                   </Button>
                 </div>
                 <FormControl>
-                  <PasswordInput autoComplete="current-password webauthn" {...field} />
+                  <PasswordInput
+                    autoComplete="current-password webauthn"
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -109,6 +117,7 @@ export function SignInTab({
           </Button>
         </form>
       </Form>
+      <PasskeyButton />
     </div>
-  );
+  )
 }

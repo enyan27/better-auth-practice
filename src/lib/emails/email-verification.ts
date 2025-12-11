@@ -1,14 +1,17 @@
-import { sendEmail } from "./send-email";
+import { sendEmail } from "./send-email"
 
 interface EmailVerificationData {
   user: {
-    name: string;
-    email: string;
-  };
-  url: string;
+    name: string
+    email: string
+  }
+  url: string
 }
 
-export async function sendEmailVerificationEmail({ user, url }: EmailVerificationData) {
+export async function sendEmailVerificationEmail({
+  user,
+  url,
+}: EmailVerificationData) {
   await sendEmail({
     to: user.email,
     subject: "Verify your email address",
@@ -24,5 +27,5 @@ export async function sendEmailVerificationEmail({ user, url }: EmailVerificatio
       </div>
     `,
     text: `Hello ${user.name},\n\nThank you for signing up! Please verify your email address by clicking this link: ${url}\n\nIf you didn't create an account, please ignore this email.\n\nThis link will expire in 24 hours.\n\nBest regards,\nYour App Team`,
-  });
+  })
 }

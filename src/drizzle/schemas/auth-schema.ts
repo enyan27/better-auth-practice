@@ -1,4 +1,4 @@
-import { pgTable, text, timestamp, boolean, integer } from "drizzle-orm/pg-core";
+import { pgTable, text, timestamp, boolean, integer } from "drizzle-orm/pg-core"
 
 export const user = pgTable("user", {
   id: text("id").primaryKey(),
@@ -16,9 +16,8 @@ export const user = pgTable("user", {
   banned: boolean("banned").default(false),
   banReason: text("ban_reason"),
   banExpires: timestamp("ban_expires"),
-  stripeCustomerId: text("stripe_customer_id"),
-  favoriteNumber: integer("favorite_number"),
-});
+  favoriteNumber: integer("favorite_number").notNull(),
+})
 
 export const session = pgTable("session", {
   id: text("id").primaryKey(),
@@ -34,8 +33,7 @@ export const session = pgTable("session", {
     .notNull()
     .references(() => user.id, { onDelete: "cascade" }),
   impersonatedBy: text("impersonated_by"),
-  activeOrganizationId: text("active_organization_id"),
-});
+})
 
 export const account = pgTable("account", {
   id: text("id").primaryKey(),
@@ -55,7 +53,7 @@ export const account = pgTable("account", {
   updatedAt: timestamp("updated_at")
     .$onUpdate(() => /* @__PURE__ */ new Date())
     .notNull(),
-});
+})
 
 export const verification = pgTable("verification", {
   id: text("id").primaryKey(),
@@ -67,7 +65,7 @@ export const verification = pgTable("verification", {
     .defaultNow()
     .$onUpdate(() => /* @__PURE__ */ new Date())
     .notNull(),
-});
+})
 
 export const twoFactor = pgTable("two_factor", {
   id: text("id").primaryKey(),
@@ -76,7 +74,7 @@ export const twoFactor = pgTable("two_factor", {
   userId: text("user_id")
     .notNull()
     .references(() => user.id, { onDelete: "cascade" }),
-});
+})
 
 export const passkey = pgTable("passkey", {
   id: text("id").primaryKey(),
@@ -92,4 +90,4 @@ export const passkey = pgTable("passkey", {
   transports: text("transports"),
   createdAt: timestamp("created_at"),
   aaguid: text("aaguid"),
-});
+})
